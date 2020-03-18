@@ -1,0 +1,63 @@
+package com.example.examplemod;
+
+import com.example.examplemod.lists.ItemList;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import net.minecraft.item.Item;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+@Mod("mymod")
+public class myMod {
+    public static myMod instance;
+    public static final String modid = "mymod";
+    public static final Logger logger = LogManager.getLogger(modid);
+
+    public myMod() {
+        instance = this;
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientRegistries);
+    }
+
+    private void setup(final FMLCommonSetupEvent event) {
+        logger.info("setup reg");
+    }
+
+    private void clientRegistries(final FMLCommonSetupEvent event) {
+        logger.info("client reg");
+    }
+
+    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+    public static class RegistryEvents {
+        @SubscribeEvent
+        public static void registerItems(final RegistryEvent.Register<Item> event) {
+
+            event.getRegistry().registerAll(
+                ItemList.tutorial_item = new Item(new Item.Properties().group(ItemGroup.MISC)).setRegistryName(location("tutorial_item"))
+                //ItemList.tutorial_item = new Item(new Item.Properties().group(ItemGroup.MISC)).setRegistryName(location("tutorial_item")),
+                //ItemList.tutorial_item = new Item(new Item.Properties().group(ItemGroup.MISC)).setRegistryName(location("tutorial_item2"))
+            );
+
+
+            //event.getRegistry().register(ItemList.tutorial_item = new Item(new Item.Properties().group(ItemGroup.MISC)).setRegistryName(new ResourceLocation(modid, "tutorial_item")));
+
+
+            logger.info("Items reg");
+        }
+    }
+
+
+    private static ResourceLocation location(String name) {
+        return new ResourceLocation(modid, name);
+    }
+
+}
